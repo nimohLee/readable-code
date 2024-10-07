@@ -7,13 +7,13 @@ import cleancode.studycafe.tobe.io.StudyCafeFileHandler;
 import cleancode.studycafe.tobe.model.StudyCafeLockerPass;
 import cleancode.studycafe.tobe.model.StudyCafePass;
 import cleancode.studycafe.tobe.model.StudyCafePassType;
+import cleancode.studycafe.tobe.model.StudyCafePasses;
 
 import java.util.List;
 
 public class StudyCafePassMachine {
 
     private final StudyCafeFileHandler studyCafeFileHandler = new StudyCafeFileHandler();
-    private final List<StudyCafePass> studyCafePasses = studyCafeFileHandler.readStudyCafePasses();
     private final InputHandler inputHandler = new InputHandler();
     private final OutputHandler outputHandler = new OutputHandler();
 
@@ -22,10 +22,13 @@ public class StudyCafePassMachine {
             outputHandler.showInitiateMessages();
 
             StudyCafePassType studyCafePassType = inputHandler.getPassTypeSelectingUserAction();
-            List<StudyCafePass> passes = getFilteredPassesByPassType(studyCafePassType);
 
-            outputHandler.showPassListForSelection(passes);
-            StudyCafePass selectedPass = inputHandler.getSelectPass(passes);
+            StudyCafePasses studyCafePasses = StudyCafePasses.of(studyCafeFileHandler.readStudyCafePasses());
+            StudyCafePasses filteredPasses = studyCafePasses.getFilteredPassesByPassType(studyCafePassType);
+
+            outputHandler.showPassListForSelection(filteredPasses);
+
+            StudyCafePass selectedPass = inputHandler.getSelectPass(filteredPasses);
 
             if (selectedPass == null) {
                 throw new IllegalArgumentException("알 수 없는 이용권입니다.");
@@ -52,12 +55,6 @@ public class StudyCafePassMachine {
         } catch (Exception e) {
             outputHandler.showSimpleMessage("알 수 없는 오류가 발생했습니다.");
         }
-    }
-
-    private List<StudyCafePass> getFilteredPassesByPassType(StudyCafePassType studyCafePassType) {
-        return studyCafePasses.stream()
-            .filter(studyCafePass -> studyCafePass.isPassTypeOf(studyCafePassType))
-            .toList();
     }
 
 }
