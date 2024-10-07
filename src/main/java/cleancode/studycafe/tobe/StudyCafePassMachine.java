@@ -22,57 +22,29 @@ public class StudyCafePassMachine {
             outputHandler.showInitiateMessages();
 
             StudyCafePassType studyCafePassType = inputHandler.getPassTypeSelectingUserAction();
+            List<StudyCafePass> passes = getFilteredPassesByPassType(studyCafePassType);
 
-            if (studyCafePassType == StudyCafePassType.HOURLY) {
-                List<StudyCafePass> hourlyPasses = getFilteredPassesByPassType(studyCafePassType);
-
-                outputHandler.showPassListForSelection(hourlyPasses);
-                StudyCafePass selectedPass = inputHandler.getSelectPass(hourlyPasses);
-                outputHandler.showPassOrderSummary(selectedPass, null);
-
-                return;
-            }
-
-            if (studyCafePassType == StudyCafePassType.WEEKLY) {
-                List<StudyCafePass> weeklyPasses = getFilteredPassesByPassType(studyCafePassType);
-
-                outputHandler.showPassListForSelection(weeklyPasses);
-                StudyCafePass selectedPass = inputHandler.getSelectPass(weeklyPasses);
-                outputHandler.showPassOrderSummary(selectedPass, null);
-
-                return;
-            }
+            outputHandler.showPassListForSelection(passes);
+            StudyCafePass selectedPass = inputHandler.getSelectPass(passes);
 
             if (studyCafePassType == StudyCafePassType.FIXED) {
-                List<StudyCafePass> fixedPasses = getFilteredPassesByPassType(studyCafePassType);
-
-                outputHandler.showPassListForSelection(fixedPasses);
-                StudyCafePass selectedPass = inputHandler.getSelectPass(fixedPasses);
-
                 List<StudyCafeLockerPass> lockerPasses = studyCafeFileHandler.readLockerPasses();
-                StudyCafeLockerPass lockerPass = lockerPasses.stream()
+
+                lockerPasses.stream()
                     .filter(option ->
                         option.getPassType() == selectedPass.getPassType()
                             && option.getDuration() == selectedPass.getDuration()
                     )
                     .findFirst()
-                    .orElse(null);
-
-                boolean lockerSelection = false;
-
-                if (lockerPass != null) {
-                    outputHandler.askLockerPass(lockerPass);
-                    lockerSelection = inputHandler.getLockerSelection();
-                }
-
-                if (lockerSelection) {
-                    outputHandler.showPassOrderSummary(selectedPass, lockerPass);
-                } else {
-                    outputHandler.showPassOrderSummary(selectedPass, null);
-                }
-
-                return;
+                    .ifPresent(lockerPass -> {
+                        outputHandler.askLockerPass(lockerPass);
+                        if (inputHandler.getLockerSelection()) {
+                            outputHandler.showPassOrderSummary(selectedPass, lockerPass);
+                        }
+                    });
             }
+
+            outputHandler.showPassOrderSummary(selectedPass, null);
 
             throw new IllegalArgumentException("알 수 없는 이용권 타입입니다.");
         } catch (AppException e) {
