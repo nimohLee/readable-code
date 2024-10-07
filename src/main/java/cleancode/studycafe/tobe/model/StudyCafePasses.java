@@ -25,12 +25,15 @@ public class StudyCafePasses {
         return new StudyCafePasses(studyCafePasses);
     }
 
-    public StudyCafePasses getFilteredPassesByPassType(StudyCafePassType studyCafePassType) {
-        List<StudyCafePass> studyCafePassList = studyCafePasses.stream()
+    public static StudyCafePasses ofPassType(List<StudyCafePass> studyCafePasses, StudyCafePassType studyCafePassType) {
+        List<StudyCafePass> passes = getFilteredPassesByPassType(studyCafePasses, studyCafePassType);
+        return of(passes);
+    }
+
+    private static List<StudyCafePass> getFilteredPassesByPassType(List<StudyCafePass> studyCafePasses, StudyCafePassType studyCafePassType) {
+        return studyCafePasses.stream()
             .filter(studyCafePass -> studyCafePass.isPassTypeOf(studyCafePassType))
             .toList();
-
-        return of(studyCafePassList);
     }
 
     public int size() {

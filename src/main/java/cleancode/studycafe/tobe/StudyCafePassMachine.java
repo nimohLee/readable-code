@@ -23,8 +23,7 @@ public class StudyCafePassMachine {
 
             StudyCafePassType studyCafePassType = inputHandler.getPassTypeSelectingUserAction();
 
-            StudyCafePasses studyCafePasses = StudyCafePasses.of(studyCafeFileHandler.readStudyCafePasses());
-            StudyCafePasses filteredPasses = studyCafePasses.getFilteredPassesByPassType(studyCafePassType);
+            StudyCafePasses filteredPasses = StudyCafePasses.ofPassType(studyCafeFileHandler.readStudyCafePasses(), studyCafePassType);
 
             outputHandler.showPassListForSelection(filteredPasses);
 
