@@ -32,9 +32,7 @@ public class StudyCafePassMachine {
 
                 lockerPasses.stream()
                     .filter(lockerPass ->
-                        lockerPass.getPassType() == selectedPass.getPassType()
-                            && lockerPass.getDuration() == selectedPass.getDuration()
-                    )
+                        lockerPass.isSamePassTypeAndDurationWith(selectedPass))
                     .findFirst()
                     .ifPresent(lockerPass -> {
                         outputHandler.askLockerPass(lockerPass);
