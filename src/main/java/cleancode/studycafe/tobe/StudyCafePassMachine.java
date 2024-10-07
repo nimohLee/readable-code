@@ -31,9 +31,9 @@ public class StudyCafePassMachine {
                 List<StudyCafeLockerPass> lockerPasses = studyCafeFileHandler.readLockerPasses();
 
                 lockerPasses.stream()
-                    .filter(option ->
-                        option.getPassType() == selectedPass.getPassType()
-                            && option.getDuration() == selectedPass.getDuration()
+                    .filter(lockerPass ->
+                        lockerPass.getPassType() == selectedPass.getPassType()
+                            && lockerPass.getDuration() == selectedPass.getDuration()
                     )
                     .findFirst()
                     .ifPresent(lockerPass -> {
