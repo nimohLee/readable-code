@@ -27,6 +27,10 @@ public class StudyCafePassMachine {
             outputHandler.showPassListForSelection(passes);
             StudyCafePass selectedPass = inputHandler.getSelectPass(passes);
 
+            if (selectedPass == null) {
+                throw new IllegalArgumentException("알 수 없는 이용권입니다.");
+            }
+
             if (studyCafePassType == StudyCafePassType.FIXED) {
                 List<StudyCafeLockerPass> lockerPasses = studyCafeFileHandler.readLockerPasses();
 
@@ -43,8 +47,6 @@ public class StudyCafePassMachine {
             }
 
             outputHandler.showPassOrderSummary(selectedPass, null);
-
-            throw new IllegalArgumentException("알 수 없는 이용권 타입입니다.");
         } catch (AppException e) {
             outputHandler.showSimpleMessage(e.getMessage());
         } catch (Exception e) {
