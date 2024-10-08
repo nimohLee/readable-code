@@ -25,19 +25,6 @@ public class StudyCafeLockerPasses {
         return new StudyCafeLockerPasses(lockerPasses);
     }
 
-    public static StudyCafeLockerPasses from(List<String> csvLines) {
-        List<StudyCafeLockerPass> lockerPasses = csvLines.stream()
-            .map(line -> {
-                String[] values = line.split(",");
-                StudyCafeSeatPassType studyCafeSeatPassType = StudyCafeSeatPassType.valueOf(values[0]);
-                int duration = Integer.parseInt(values[1]);
-                int price = Integer.parseInt(values[2]);
-                return StudyCafeLockerPass.of(studyCafeSeatPassType, duration, price);
-            }).toList();
-
-        return of(lockerPasses);
-    }
-
     public StudyCafeLockerPass findSamePassTypeAndDurationWith(StudyCafeSeatPass studyCafeSeatPass) {
         return lockerPasses.stream()
             .filter(lockerPass ->

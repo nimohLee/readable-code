@@ -1,9 +1,6 @@
 package cleancode.studycafe.tobe.io;
 
-import cleancode.studycafe.tobe.model.StudyCafeLockerPasses;
-import cleancode.studycafe.tobe.model.StudyCafeSeatPass;
-import cleancode.studycafe.tobe.model.StudyCafeSeatPassType;
-import cleancode.studycafe.tobe.model.StudyCafeSeatPasses;
+import cleancode.studycafe.tobe.model.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -43,7 +40,19 @@ public class StudyCafeFileHandler {
         try {
             List<String> lines = Files.readAllLines(Paths.get(STUDY_CAFE_RESOURCE_PATH + LOCKER_CSV_FILE_NAME));
 
-            return StudyCafeLockerPasses.from(lines);
+            List<StudyCafeLockerPass> lockerPasses = new ArrayList<>();
+
+            for (String line : lines) {
+                String[] values = line.split(CSV_DELIMITER);
+                StudyCafeSeatPassType studyCafeSeatPassType = StudyCafeSeatPassType.valueOf(values[0]);
+                int duration = Integer.parseInt(values[1]);
+                int price = Integer.parseInt(values[2]);
+
+                StudyCafeLockerPass studyCafeLockerPass = StudyCafeLockerPass.of(studyCafeSeatPassType, duration, price);
+                lockerPasses.add(studyCafeLockerPass);
+            }
+
+            return StudyCafeLockerPasses.of(lockerPasses);
         } catch (IOException e) {
             throw new RuntimeException("파일을 읽는데 실패했습니다.", e);
         }
