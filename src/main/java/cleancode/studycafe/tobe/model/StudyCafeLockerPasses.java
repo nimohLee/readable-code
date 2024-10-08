@@ -29,19 +29,19 @@ public class StudyCafeLockerPasses {
         List<StudyCafeLockerPass> lockerPasses = csvLines.stream()
             .map(line -> {
                 String[] values = line.split(",");
-                StudyCafePassType studyCafePassType = StudyCafePassType.valueOf(values[0]);
+                StudyCafeSeatPassType studyCafeSeatPassType = StudyCafeSeatPassType.valueOf(values[0]);
                 int duration = Integer.parseInt(values[1]);
                 int price = Integer.parseInt(values[2]);
-                return StudyCafeLockerPass.of(studyCafePassType, duration, price);
+                return StudyCafeLockerPass.of(studyCafeSeatPassType, duration, price);
             }).toList();
 
         return of(lockerPasses);
     }
 
-    public StudyCafeLockerPass findSamePassTypeAndDurationWith(StudyCafePass studyCafePass) {
+    public StudyCafeLockerPass findSamePassTypeAndDurationWith(StudyCafeSeatPass studyCafeSeatPass) {
         return lockerPasses.stream()
             .filter(lockerPass ->
-                lockerPass.isSamePassTypeAndDurationWith(studyCafePass))
+                lockerPass.isSamePassTypeAndDurationWith(studyCafeSeatPass))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException("해당하는 스터디카페 사물함 사용권이 없습니다."));
     }

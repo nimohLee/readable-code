@@ -4,32 +4,35 @@ import cleancode.studycafe.tobe.exception.AppException;
 import cleancode.studycafe.tobe.io.InputHandler;
 import cleancode.studycafe.tobe.io.OutputHandler;
 import cleancode.studycafe.tobe.model.*;
+import cleancode.studycafe.tobe.policy.LockerPolicy;
 
 public class StudyCafePassMachine {
 
     private final InputHandler inputHandler = new InputHandler();
     private final OutputHandler outputHandler = new OutputHandler();
-    private final StudyCafePasses studyCafePasses;
-    private final StudyCafeLockerPasses studyCafeLockerPasses;
+    private final StudyCafeSeatPasses allStudyCafeSeatPasses;
+    private final StudyCafeLockerPasses allStudyCafeLockerPasses;
+    private final LockerPolicy lockerPolicy;
 
-    public StudyCafePassMachine(StudyCafePasses studyCafePasses, StudyCafeLockerPasses studyCafeLockerPasses) {
-        this.studyCafePasses = studyCafePasses;
-        this.studyCafeLockerPasses = studyCafeLockerPasses;
+    public StudyCafePassMachine(StudyCafeSeatPasses allStudyCafeSeatPasses, StudyCafeLockerPasses allStudyCafeLockerPasses, LockerPolicy lockerPolicy) {
+        this.allStudyCafeSeatPasses = allStudyCafeSeatPasses;
+        this.allStudyCafeLockerPasses = allStudyCafeLockerPasses;
+        this.lockerPolicy = lockerPolicy;
     }
 
     public void run() {
         try {
             outputHandler.showInitiateMessages();
 
-            StudyCafePassType studyCafePassType = inputHandler.getPassTypeSelectingUserAction();
-            StudyCafePasses filteredPasses = studyCafePasses.getFilteredByPassType(studyCafePassType);
+            StudyCafeSeatPassType studyCafeSeatPassType = inputHandler.getPassTypeSelectingUserAction();
+            StudyCafeSeatPasses filteredPasses = allStudyCafeSeatPasses.getFilteredByPassType(studyCafeSeatPassType);
 
             outputHandler.showPassListForSelection(filteredPasses);
 
-            StudyCafePass selectedPass = inputHandler.getSelectPass(filteredPasses);
+            StudyCafeSeatPass selectedPass = inputHandler.getSelectPass(filteredPasses);
 
-            if (studyCafePassType == StudyCafePassType.FIXED) {
-                StudyCafeLockerPass findStudyCafeLockerPass = studyCafeLockerPasses.findSamePassTypeAndDurationWith(selectedPass);
+            if (lockerPolicy.isLockerBuyablePassType(studyCafeSeatPassType)) {
+                StudyCafeLockerPass findStudyCafeLockerPass = allStudyCafeLockerPasses.findSamePassTypeAndDurationWith(selectedPass);
 
                 outputHandler.askLockerPass(findStudyCafeLockerPass);
                 if (inputHandler.getLockerSelection()) {

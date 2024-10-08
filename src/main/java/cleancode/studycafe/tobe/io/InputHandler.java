@@ -1,8 +1,8 @@
 package cleancode.studycafe.tobe.io;
 
-import cleancode.studycafe.tobe.model.StudyCafePass;
-import cleancode.studycafe.tobe.model.StudyCafePassType;
-import cleancode.studycafe.tobe.model.StudyCafePasses;
+import cleancode.studycafe.tobe.model.StudyCafeSeatPass;
+import cleancode.studycafe.tobe.model.StudyCafeSeatPassType;
+import cleancode.studycafe.tobe.model.StudyCafeSeatPasses;
 
 import java.util.Scanner;
 
@@ -10,22 +10,22 @@ public class InputHandler {
 
     private static final Scanner SCANNER = new Scanner(System.in);
 
-    public StudyCafePassType getPassTypeSelectingUserAction() {
+    public StudyCafeSeatPassType getPassTypeSelectingUserAction() {
         String userInput = SCANNER.nextLine();
 
-        return StudyCafePassType.findByUserInput(userInput);
+        return StudyCafeSeatPassType.findByUserInput(userInput);
     }
 
-    public StudyCafePass getSelectPass(StudyCafePasses passes) {
+    public StudyCafeSeatPass getSelectPass(StudyCafeSeatPasses passes) {
         String userInput = SCANNER.nextLine();
         int selectedIndex = Integer.parseInt(userInput) - 1;
-        StudyCafePass studyCafePass = passes.get(selectedIndex);
+        StudyCafeSeatPass studyCafeSeatPass = passes.get(selectedIndex);
 
-        if (studyCafePass == null) {
+        if (studyCafeSeatPass == null) {
             throw new IllegalArgumentException("알 수 없는 이용권입니다.");
         }
 
-        return studyCafePass;
+        return studyCafeSeatPass;
     }
 
     public boolean getLockerSelection() {

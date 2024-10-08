@@ -4,7 +4,7 @@ import cleancode.studycafe.tobe.exception.AppException;
 
 import java.util.Arrays;
 
-public enum StudyCafePassType {
+public enum StudyCafeSeatPassType {
 
     HOURLY("시간 단위 이용권", "1"),
     WEEKLY("주 단위 이용권", "2"),
@@ -13,12 +13,12 @@ public enum StudyCafePassType {
     private final String description;
     private final String userInput;
 
-    StudyCafePassType(String description, String userInput) {
+    StudyCafeSeatPassType(String description, String userInput) {
         this.description = description;
         this.userInput = userInput;
     }
 
-    public static StudyCafePassType findByUserInput(String userInput) {
+    public static StudyCafeSeatPassType findByUserInput(String userInput) {
         return Arrays.stream(values())
             .filter(type -> userInput.equals(type.userInput))
             .findFirst()
