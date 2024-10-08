@@ -1,15 +1,13 @@
 package cleancode.studycafe.tobe;
 
 import cleancode.studycafe.tobe.exception.AppException;
-import cleancode.studycafe.tobe.io.InputHandler;
-import cleancode.studycafe.tobe.io.OutputHandler;
+import cleancode.studycafe.tobe.io.StudyCafeIOHandler;
 import cleancode.studycafe.tobe.model.*;
 import cleancode.studycafe.tobe.policy.LockerPolicy;
 
 public class StudyCafePassMachine {
 
-    private final InputHandler inputHandler = new InputHandler();
-    private final OutputHandler outputHandler = new OutputHandler();
+    private final StudyCafeIOHandler ioHandler = new StudyCafeIOHandler();
     private final StudyCafeSeatPasses allStudyCafeSeatPasses;
     private final StudyCafeLockerPasses allStudyCafeLockerPasses;
     private final LockerPolicy lockerPolicy;
@@ -22,29 +20,29 @@ public class StudyCafePassMachine {
 
     public void run() {
         try {
-            outputHandler.showInitiateMessages();
+            ioHandler.showInitiateMessages();
 
-            StudyCafeSeatPassType studyCafeSeatPassType = inputHandler.getPassTypeSelectingUserAction();
+            StudyCafeSeatPassType studyCafeSeatPassType = ioHandler.getPassTypeSelectingUserAction();
             StudyCafeSeatPasses filteredPasses = allStudyCafeSeatPasses.getFilteredByPassType(studyCafeSeatPassType);
 
-            outputHandler.showPassListForSelection(filteredPasses);
+            ioHandler.showPassListForSelection(filteredPasses);
 
-            StudyCafeSeatPass selectedPass = inputHandler.getSelectPass(filteredPasses);
+            StudyCafeSeatPass selectedPass = ioHandler.getSelectPass(filteredPasses);
 
             if (lockerPolicy.isLockerBuyablePassType(studyCafeSeatPassType)) {
                 StudyCafeLockerPass findStudyCafeLockerPass = allStudyCafeLockerPasses.findSamePassTypeAndDurationWith(selectedPass);
 
-                outputHandler.askLockerPass(findStudyCafeLockerPass);
-                if (inputHandler.getLockerSelection()) {
-                    outputHandler.showPassOrderSummary(selectedPass, findStudyCafeLockerPass);
+                ioHandler.askLockerPass(findStudyCafeLockerPass);
+                if (ioHandler.getLockerSelection()) {
+                    ioHandler.showPassOrderSummary(selectedPass, findStudyCafeLockerPass);
                 }
             }
 
-            outputHandler.showPassOrderSummary(selectedPass, null);
+            ioHandler.showPassOrderSummary(selectedPass, null);
         } catch (AppException e) {
-            outputHandler.showSimpleMessage(e.getMessage());
+            ioHandler.showSimpleMessage(e.getMessage());
         } catch (Exception e) {
-            outputHandler.showSimpleMessage("알 수 없는 오류가 발생했습니다.");
+            ioHandler.showSimpleMessage("알 수 없는 오류가 발생했습니다.");
         }
     }
 
