@@ -23,10 +23,6 @@ public class StudyCafePassMachine {
 
             StudyCafePass selectedPass = inputHandler.getSelectPass(filteredPasses);
 
-            if (selectedPass == null) {
-                throw new IllegalArgumentException("알 수 없는 이용권입니다.");
-            }
-
             if (studyCafePassType == StudyCafePassType.FIXED) {
                 StudyCafeLockerPasses lockerPasses = studyCafeFileHandler.readLockerPasses();
                 StudyCafeLockerPass findStudyCafeLockerPass = lockerPasses.findSamePassTypeAndDurationWith(selectedPass);

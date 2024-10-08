@@ -19,7 +19,13 @@ public class InputHandler {
     public StudyCafePass getSelectPass(StudyCafePasses passes) {
         String userInput = SCANNER.nextLine();
         int selectedIndex = Integer.parseInt(userInput) - 1;
-        return passes.get(selectedIndex);
+        StudyCafePass studyCafePass = passes.get(selectedIndex);
+
+        if (studyCafePass == null) {
+            throw new IllegalArgumentException("알 수 없는 이용권입니다.");
+        }
+
+        return studyCafePass;
     }
 
     public boolean getLockerSelection() {
