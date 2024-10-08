@@ -3,6 +3,7 @@ package cleancode.studycafe.tobe.io;
 import cleancode.studycafe.tobe.model.StudyCafeLockerPasses;
 import cleancode.studycafe.tobe.model.StudyCafePass;
 import cleancode.studycafe.tobe.model.StudyCafePassType;
+import cleancode.studycafe.tobe.model.StudyCafePasses;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,7 +18,7 @@ public class StudyCafeFileHandler {
     private static final String LOCKER_CSV_FILE_NAME = "locker.csv";
     private static final String CSV_DELIMITER = ",";
 
-    public List<StudyCafePass> readStudyCafePasses() {
+    public StudyCafePasses readStudyCafePasses() {
         try {
             List<String> lines = Files.readAllLines(Paths.get(STUDY_CAFE_RESOURCE_PATH + PASS_LIST_CSV_FILE_NAME));
             List<StudyCafePass> studyCafePasses = new ArrayList<>();
@@ -32,7 +33,7 @@ public class StudyCafeFileHandler {
                 studyCafePasses.add(studyCafePass);
             }
 
-            return studyCafePasses;
+            return StudyCafePasses.of(studyCafePasses);
         } catch (IOException e) {
             throw new RuntimeException("파일을 읽는데 실패했습니다.", e);
         }
