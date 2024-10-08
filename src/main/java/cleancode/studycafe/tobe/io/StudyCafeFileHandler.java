@@ -12,12 +12,17 @@ import java.util.List;
 
 public class StudyCafeFileHandler {
 
+    private static final String STUDY_CAFE_RESOURCE_PATH = "src/main/resources/cleancode/studycafe/";
+    private static final String PASS_LIST_CSV_FILE_NAME = "pass-list.csv";
+    private static final String LOCKER_CSV_FILE_NAME = "locker.csv";
+    private static final String CSV_DELIMITER = ",";
+
     public List<StudyCafePass> readStudyCafePasses() {
         try {
-            List<String> lines = Files.readAllLines(Paths.get("src/main/resources/cleancode/studycafe/pass-list.csv"));
+            List<String> lines = Files.readAllLines(Paths.get(STUDY_CAFE_RESOURCE_PATH + PASS_LIST_CSV_FILE_NAME));
             List<StudyCafePass> studyCafePasses = new ArrayList<>();
             for (String line : lines) {
-                String[] values = line.split(",");
+                String[] values = line.split(CSV_DELIMITER);
                 StudyCafePassType studyCafePassType = StudyCafePassType.valueOf(values[0]);
                 int duration = Integer.parseInt(values[1]);
                 int price = Integer.parseInt(values[2]);
@@ -35,7 +40,7 @@ public class StudyCafeFileHandler {
 
     public StudyCafeLockerPasses readLockerPasses() {
         try {
-            List<String> lines = Files.readAllLines(Paths.get("src/main/resources/cleancode/studycafe/locker.csv"));
+            List<String> lines = Files.readAllLines(Paths.get(STUDY_CAFE_RESOURCE_PATH + LOCKER_CSV_FILE_NAME));
 
             return StudyCafeLockerPasses.from(lines);
         } catch (IOException e) {
