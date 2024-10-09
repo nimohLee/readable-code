@@ -1,24 +1,42 @@
 package cleancode.studycafe.tobe.model;
 
-public class StudyCafePass {
+/**
+ * packageName    : cleancode.studycafe.tobe.model
+ * fileName       : StudyCafePass
+ * author         : nimoh
+ * date           : 2024/10/08
+ * description    :
+ * ===========================================================
+ * DATE              AUTHOR             NOTE
+ * -----------------------------------------------------------
+ * 2024/10/08        nimoh       최초 생성
+ */
+public abstract class StudyCafePass {
 
-    private final StudyCafePassType passType;
-    private final int duration;
-    private final int price;
-    private final double discountRate;
+    protected final StudyCafeSeatPassType passType;
+    protected final int duration;
+    protected final int price;
 
-    private StudyCafePass(StudyCafePassType passType, int duration, int price, double discountRate) {
+    protected StudyCafePass(StudyCafeSeatPassType passType, int duration, int price) {
         this.passType = passType;
         this.duration = duration;
         this.price = price;
-        this.discountRate = discountRate;
     }
 
-    public static StudyCafePass of(StudyCafePassType passType, int duration, int price, double discountRate) {
-        return new StudyCafePass(passType, duration, price, discountRate);
+    public String display() {
+        if (passType == StudyCafeSeatPassType.HOURLY) {
+            return String.format("%s시간권 - %d원", duration, price);
+        }
+        if (passType == StudyCafeSeatPassType.WEEKLY) {
+            return String.format("%s주권 - %d원", duration, price);
+        }
+        if (passType == StudyCafeSeatPassType.FIXED) {
+            return String.format("%s주권 - %d원", duration, price);
+        }
+        return "";
     }
 
-    public StudyCafePassType getPassType() {
+    public StudyCafeSeatPassType getPassType() {
         return passType;
     }
 
@@ -29,22 +47,4 @@ public class StudyCafePass {
     public int getPrice() {
         return price;
     }
-
-    public double getDiscountRate() {
-        return discountRate;
-    }
-
-    public String display() {
-        if (passType == StudyCafePassType.HOURLY) {
-            return String.format("%s시간권 - %d원", duration, price);
-        }
-        if (passType == StudyCafePassType.WEEKLY) {
-            return String.format("%s주권 - %d원", duration, price);
-        }
-        if (passType == StudyCafePassType.FIXED) {
-            return String.format("%s주권 - %d원", duration, price);
-        }
-        return "";
-    }
-
 }

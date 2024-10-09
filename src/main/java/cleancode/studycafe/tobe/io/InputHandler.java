@@ -1,35 +1,31 @@
 package cleancode.studycafe.tobe.io;
 
-import cleancode.studycafe.tobe.exception.AppException;
-import cleancode.studycafe.tobe.model.StudyCafePass;
-import cleancode.studycafe.tobe.model.StudyCafePassType;
+import cleancode.studycafe.tobe.model.StudyCafeSeatPass;
+import cleancode.studycafe.tobe.model.StudyCafeSeatPassType;
+import cleancode.studycafe.tobe.model.StudyCafeSeatPasses;
 
-import java.util.List;
 import java.util.Scanner;
 
 public class InputHandler {
 
     private static final Scanner SCANNER = new Scanner(System.in);
 
-    public StudyCafePassType getPassTypeSelectingUserAction() {
+    public StudyCafeSeatPassType getPassTypeSelectingUserAction() {
         String userInput = SCANNER.nextLine();
 
-        if ("1".equals(userInput)) {
-            return StudyCafePassType.HOURLY;
-        }
-        if ("2".equals(userInput)) {
-            return StudyCafePassType.WEEKLY;
-        }
-        if ("3".equals(userInput)) {
-            return StudyCafePassType.FIXED;
-        }
-        throw new AppException("잘못된 입력입니다.");
+        return StudyCafeSeatPassType.findByUserInput(userInput);
     }
 
-    public StudyCafePass getSelectPass(List<StudyCafePass> passes) {
+    public StudyCafeSeatPass getSelectPass(StudyCafeSeatPasses passes) {
         String userInput = SCANNER.nextLine();
         int selectedIndex = Integer.parseInt(userInput) - 1;
-        return passes.get(selectedIndex);
+        StudyCafeSeatPass studyCafeSeatPass = passes.get(selectedIndex);
+
+        if (studyCafeSeatPass == null) {
+            throw new IllegalArgumentException("알 수 없는 이용권입니다.");
+        }
+
+        return studyCafeSeatPass;
     }
 
     public boolean getLockerSelection() {
